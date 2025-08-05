@@ -1,0 +1,40 @@
+# ./docker-compose.yml
+version: "3.8"
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: smart_mill_service_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: smart_mill_service_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  frontend:
+    build: ./frontend
+    container_name: smart_mill_service_frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - db
+    
+  backend:
+    build: ./backend
+    container_name: smart_mill_service_backend
+    ports:
+      - "4000:4000"
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+      - DB_DATABASE=smart_mill_service_db
+
+volumes:
+  postgres_data:
