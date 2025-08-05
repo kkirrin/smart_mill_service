@@ -39,7 +39,8 @@ const main = async () => {
         password: process.env.DB_PASSWORD || '',
         database: process.env.DB_DATABASE || '',
         entities: [Product],
-        synchronize: true,
+        synchronize: false,
+        migrationsRun: true,
         logging: true,
     });
 
